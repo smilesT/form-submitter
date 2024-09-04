@@ -1,0 +1,14 @@
+[Unit]
+Description=Docker Compose for FormSubmitter
+After=network.target
+
+[Service]
+WorkingDirectory=%h/form-submitter
+ExecStart=/usr/bin/docker compose up --build
+ExecStop=/usr/bin/docker compose down
+Restart=always
+RestartSec=10
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target

@@ -1,3 +1,51 @@
-* form-submitter
+* Flask Email Submission Service
+This project provides a simple Flask-based web service for handling email submissions through an HTTP POST request.
 
-curl -X POST http://localhost:5000/submit -H "Content-Type: application/json" -d '{"email": "test@test.com"}'
+** Features
+- Accepts JSON payloads with user-submitted data via the `/submit` endpoint.
+- Sends the data as an email using a configured SMTP server.
+- Provides a `/health` endpoint for service health checks.
+
+** Configure Environment Variables
+Copy the template .env file to create your environment configuration.
+#+begin_src shell
+cp .env.template .env
+#+end_src
+
+Ensure the following environment variables are set:
+- SMTP_SERVER: SMTP server address (e.g., smtp.example.com)
+- SMTP_PORT: SMTP server port (e.g., 587)
+- SMTP_USERNAME: Username for SMTP authentication
+- SMTP_PASSWORD: Password for SMTP authentication
+- SMTP_TIMEOUT: Timeout for SMTP connections (in seconds)
+- TO_EMAIL: The recipient email address
+
+** Set Up Systemd Services
+To manage your containers with Systemd, make the setup script executable and run it.
+
+*** Make the Script Executable (if not)
+#+begin_src shell
+sudo chmod +x ./setup_systemd_services.sh
+#+end_src
+
+*** Run the Setup Script
+#+begin_src shell
+./setup_systemd_services.sh
+#+end_src
+
+This script will create and enable Systemd services for Docker Compose.
+
+*** Enable linger for user service (run when logged out)
+
+#+begin_src shell
+sudo loginctl enable-linger <user>
+#+end_src
+
+** Example Usage
+Send a POST request with JSON data to `/submit`:
+
+#+BEGIN_SRC bash
+curl -X POST http://localhost:5000/submit \
+-H "Content-Type: application/json" \
+-d '{"email": "test@test.com", "name": "John Doe", "text": "This is a test message."}'
+#+END_SRC
