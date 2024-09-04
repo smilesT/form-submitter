@@ -35,6 +35,7 @@ curl -X POST http://localhost:5000/submit \
 """
 
 from flask import Flask, request, jsonify, Response
+from flask_cors import CORS
 import logging
 from typing import Tuple, Union
 import smtplib
@@ -44,6 +45,16 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 app = Flask(__name__)
+CORS(
+    app,
+    resources={
+        r"/*": {
+            "origins": "*",
+            "allow_headers": "Content-Type",
+            "methods": ["GET", "POST", "OPTIONS"],
+        }
+    },
+)
 
 # Configure logging
 logging.basicConfig(
@@ -106,7 +117,7 @@ def send_email(to_email: str, subject: str, body: str) -> bool:
         return False
 
 
-@app.route("/submit", methods=["POST"])
+@app.route("/submit", methods=["POST", "OPTIONS"])
 def submit() -> Tuple[Response, int]:
     """
     Handle POST requests to submit data.
@@ -120,6 +131,15 @@ def submit() -> Tuple[Response, int]:
         - 400 if the request doesn't contain JSON data or if data is missing.
         - 500 if an internal error occurs.
     """
+    if request.method == "OPTIONS":
+        # Handle preflight request
+        response = Response()
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type")
+        response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        response.headers.add("Access-Control-Max-Age", "3600")
+        return response
+
     try:
         # Check if the request contains JSON
         if not request.is_json:
@@ -142,7 +162,9 @@ def submit() -> Tuple[Response, int]:
         if not send_email(TO_EMAIL, "Form Submission - milesguard.com", data):
             return jsonify({"error": "Failed to send email"}), 500
 
-        return jsonify({"message": "Data received successfully", "data": data}), 200
+        response = jsonify({"message": "Data received successfully", "data": data})
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response
 
     except json.JSONDecodeError:
         logger.error("Invalid JSON provided in the request.")

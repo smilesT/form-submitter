@@ -63,4 +63,9 @@ services:
       - traefik_certs:/etc/traefik/certs
     networks:
       - api_network
+    labels:
+      - "traefik.http.middlewares.cors.headers.accesscontrolalloworigin=*"
+      - "traefik.http.middlewares.cors.headers.accesscontrolallowmethods=GET,POST,OPTIONS"
+      - "traefik.http.middlewares.cors.headers.accesscontrolallowheaders=Content-Type"
+      - "traefik.http.middlewares.cors.headers.accesscontrolexposeheaders=Content-Length,Content-Type"
     restart: unless-stopped
