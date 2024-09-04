@@ -43,6 +43,7 @@ import json
 import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(
@@ -176,8 +177,9 @@ def submit() -> Tuple[Response, int]:
 
 @app.route("/health", methods=["GET"])
 def health_check() -> FlaskResponse:
-    """Endpoint for Docker Healthcheck"""
-    return jsonify({"status": "healthy"}), 200
+    """Endpoint for Docker Healthcheck with a human-readable timestamp"""
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return jsonify({"status": "healthy", "timestamp": current_time}), 200
 
 
 if __name__ == "__main__":

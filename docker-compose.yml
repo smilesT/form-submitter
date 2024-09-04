@@ -18,7 +18,7 @@ services:
       - 5000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.formsubmitterapi.rule=Host(`form.milesguard.com`)"
+      - "traefik.http.routers.formsubmitterapi.rule=Host(`flux.milesguard.com`)"
       - "traefik.http.routers.formsubmitterapi.entrypoints=websecure"
       - "traefik.http.routers.formsubmitterapi.tls=true"
       - "traefik.http.routers.formsubmitterapi.tls.certresolver=formsubmitterresolver"
@@ -33,7 +33,7 @@ services:
       SMTP_USERNAME: ${SMTP_USERNAME}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       TO_EMAIL: ${TO_EMAIL}
-    command: sh -c "gunicorn -w 1 -b 0.0.0.0:5000 formsubmitter_api:app"
+    command: sh -c "gunicorn -w 8 -b 0.0.0.0:5000 formsubmitter_api:app"
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"]
