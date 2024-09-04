@@ -1,0 +1,3 @@
+* form-submitter
+
+curl -X POST http://localhost:5000/submit -H "Content-Type: application/json" -d '{"email": "test@test.com"}'

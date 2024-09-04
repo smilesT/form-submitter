@@ -1,0 +1,24 @@
+---
+networks:
+  api_network:
+    driver: bridge
+
+services:
+  formsubmitterapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: formsubmitterapi
+    networks:
+      - api_network
+    ports:
+      - 5000:5000
+    volumes:
+      - ./formsubmitter_api.py:/app/formsubmitter_api.py
+    command: sh -c "gunicorn -w 1 -b 0.0.0.0:5000 formsubmitter_api:app"
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
