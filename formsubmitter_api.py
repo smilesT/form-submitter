@@ -78,7 +78,7 @@ def send_email(to_email: str, subject: str, body: str) -> bool:
         from_email = SMTP_USERNAME
 
         if isinstance(body, dict):
-            logger.error(f"Body is a dict, converting to string: {body}")
+            # logger.info(f"Body is a dict, converting to string: {body}")
             body = json.dumps(body)  # Convert dict to string if necessary
 
         # Create the email
