@@ -1,8 +1,0 @@
-[Unit]
-Description=Healthcheck for flux.milesguard.com
-After=network.target
-
-[Service]
-WorkingDirectory=%h/form-submitter
-ExecStart=/usr/bin/bash %h/form-submitter/healthcheck_external.sh
-Restart=on-failure
