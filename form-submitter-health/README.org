@@ -1,0 +1,27 @@
+* form-submitter-health
+
+A simple script to check the health of the [[https://github.com/smilesT/form-submitter][form-submitter]]
+
+** Configure Variables
+If necessary: URL, Email-Address
+
+** Set Up Systemd Services
+To manage your containers with Systemd, make the setup script executable and run it.
+
+*** Make the Script Executable (if not)
+#+begin_src shell
+sudo chmod +x ./setup_systemd_services.sh
+#+end_src
+
+*** Run the Setup Script
+#+begin_src shell
+sudo ./setup_systemd_services.sh
+#+end_src
+
+This script will create and enable Systemd services for Docker Compose.
+
+*** Enable linger for user service (run when logged out)
+
+#+begin_src shell
+sudo loginctl enable-linger <user>
+#+end_src

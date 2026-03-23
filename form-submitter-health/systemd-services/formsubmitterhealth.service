@@ -1,0 +1,8 @@
+[Unit]
+Description=Healthcheck for flux.milesguard.com
+After=network.target
+
+[Service]
+WorkingDirectory=/home/plex/form-submitter-health
+ExecStart=/usr/bin/bash /home/plex/form-submitter-health/healthcheck_external.sh
+Restart=on-failure
